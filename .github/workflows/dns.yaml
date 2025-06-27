@@ -3,6 +3,7 @@ on: [push]
 jobs:
   syntax-check:
     runs-on: ubuntu-22.04
+    environment: dns
     container:
       image: hashicorp/terraform:1.12.2
     steps:
