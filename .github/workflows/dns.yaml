@@ -1,5 +1,9 @@
 name: Apply DNS
 on: [push]
+
+env:
+  TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
+
 jobs:
   syntax-check:
     runs-on: ubuntu-22.04
@@ -7,8 +11,6 @@ jobs:
     defaults:
       run:
         working-directory: dns
-      env:
-        TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
     container:
       image: hashicorp/terraform:1.12.2
     steps:
