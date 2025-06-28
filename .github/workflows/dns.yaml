@@ -30,12 +30,17 @@ jobs:
       - name: Terraform plan
         id: set_skip
         run: |
-          terraform plan -out=dns.plan -input=false -var "cloudflare_api_token=$CLOUDFLARE_API_TOKEN" -detailed-exitcode
-          if [[ $? -eq 2 ]]; then
+          terraform plan -out=dns.plan -input=false -var "cloudflare_api_token=$CLOUDFLARE_API_TOKEN" -detailed-exitcode || exit_code=$?
+          exit_code=${exit_code:-0}
+          if [[ "$exit_code" -eq 2 ]]; then
             echo "should_skip=false" >> $GITHUB_OUTPUT
             exit 0
-          else
+          elif [[ "$exit_code" -eq 0 ]]; then
             echo "should_skip=true" >> $GITHUB_OUTPUT
+            exit 0
+          else
+            echo "Terraform plan failed with unexpected error (exit $exit_code)"
+            exit $exit_code
           fi
       - name: Archive terraform plan
         uses: actions/upload-artifact@v4
