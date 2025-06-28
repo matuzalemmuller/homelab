@@ -1,6 +1,8 @@
 name: Apply DNS changes
 on:
   push:
+    paths:
+      - dns/**
     branches:
       - main
 env:
@@ -11,11 +13,11 @@ jobs:
   terraform-plan:
     runs-on: ubuntu-22.04
     environment: dns-tf-plan
+    container:
+      image: hashicorp/terraform:1.12.2
     defaults:
       run:
         working-directory: dns
-    container:
-      image: hashicorp/terraform:1.12.2
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -31,7 +33,9 @@ jobs:
   
   terraform-apply:
     needs: terraform-plan
-    runs-on: hashicorp/terraform:1.12.2
+    runs-on: ubuntu-22.04
+    container:
+      image: hashicorp/terraform:1.12.2
     environment: dns-tf-apply
     steps:
       - name: Checkout repository
