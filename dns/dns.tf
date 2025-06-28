@@ -15,10 +15,6 @@ locals {
         {
             name    = "k8s.homelab"
             content = "192.168.0.30"
-        },
-        {
-            name    = "test_github"
-            content = "123.123.123.123"
         }
     ]
 }

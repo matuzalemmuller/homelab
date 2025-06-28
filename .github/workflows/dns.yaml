@@ -43,6 +43,7 @@ jobs:
             exit $exit_code
           fi
       - name: Archive terraform plan
+        if: steps.set_skip.outputs.should_skip_apply == 'false'
         uses: actions/upload-artifact@v4
         with:
           name: dns.plan
