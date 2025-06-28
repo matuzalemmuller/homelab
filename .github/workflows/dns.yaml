@@ -3,7 +3,7 @@ on:
   push:
     paths:
       - dns/**
-      - .github/worksflows/dns.yaml
+      - .github/workflows/dns.yaml
     branches:
       - main
 
