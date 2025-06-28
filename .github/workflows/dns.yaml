@@ -23,5 +23,18 @@ jobs:
         run: terraform init -input=false
       - name: Terraform plan
         run: terraform plan -out=dns.plan -input=false -var "cloudflare_api_token=$CLOUDFLARE_API_TOKEN"
+      - name: Aprove terraform plan before pushing changes
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ github.TOKEN }}
+          approvers: matuzalemmuller
+          minimum-approvals: 1
+          issue-title: "Deploying DNS changes to CloudFlare"
+          issue-body: "Please approve or deny the DNS changes."
+          issue-body-file-path: dns.plan
+          exclude-workflow-initiator-as-approver: false
+          fail-on-denial: true
+          additional-approved-words: ''
+          additional-denied-words: ''
       - name: Terraform apply
         run: terraform apply dns.plan
