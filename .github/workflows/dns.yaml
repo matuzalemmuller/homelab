@@ -30,6 +30,7 @@ jobs:
           path: dns/dns.plan
   
   terraform-apply:
+    needs: terraform-plan
     runs-on: hashicorp/terraform:1.12.2
     environment: dns-tf-apply
     steps:
