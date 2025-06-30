@@ -1,0 +1,47 @@
+- name: "Upgrade all packages (this may take a while)"
+  apt:
+    upgrade: true
+    update_cache: true
+  register: apt_upgrade
+
+- name: "Install packages via apt (this may take a while)"
+  apt:
+    name: "{{ packages }}"
+    state: latest
+  vars:
+    packages:
+      - bind9-dnsutils
+      - command-not-found
+      - g++
+      - gcc
+      - git
+      - iotop
+      - jq
+      - htop
+      - libncurses5-dev
+      - libpcap-dev
+      - libreadline-dev
+      - make
+      - npm
+      - net-tools
+      - openresolv
+      - strace
+      - tcpdump
+      - tmux
+      - tree
+      - vim
+      - wireguard
+  register: apt_install
+
+- name: "Update packages in command-not-found"
+  shell: update-command-not-found
+  when: apt_upgrade.changed or apt_install.changed
+
+- name: "Get packages installed/upgraded today"
+  shell: grep -E "^$(date +%Y-%m-%d).+ (install|upgrade) " /var/log/dpkg.log | cut -d " " -f 3-5
+  register: result
+  when: apt_upgrade.changed or apt_install.changed
+
+- name: "Show packages installed/upgraded today"
+  debug: msg="{{ result.stdout_lines }}"
+  when: apt_upgrade.changed or apt_install.changed

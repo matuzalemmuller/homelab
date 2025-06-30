@@ -1,0 +1,5 @@
+- import_tasks: bashrc.yaml
+- import_tasks: copy.yaml
+- import_tasks: ddns.yaml
+- import_tasks: docker.yaml
+- import_tasks: resolv.yaml

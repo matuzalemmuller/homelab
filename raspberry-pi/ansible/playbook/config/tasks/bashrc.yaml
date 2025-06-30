@@ -1,0 +1,54 @@
+- name: "bashrc: Add ls aliases to /home/pi/.bashrc"
+  become: true
+  become_user: "pi"
+  blockinfile:
+    marker: "## {mark} Add ls aliases"
+    path: "/home/pi/.bashrc"
+    insertafter: "EOF"
+    block: |
+      alias ls='ls --color=auto'
+      alias la='ls -la'
+      alias ll='ls -lh'
+
+- name: "bashrc: Add various aliases to /home/pi/.bashrc"
+  become: true
+  become_user: "pi"
+  blockinfile:
+    marker: "## {mark} Add various aliases"
+    path: "/home/pi/.bashrc"
+    insertafter: "EOF"
+    block: |
+      alias cpv='rsync -ah --info=progress2'
+      alias grep='grep --color=auto'
+      alias cnf='command-not-found'
+
+- name: "bashrc: Increase HISTORY limit"
+  become: true
+  become_user: "pi"
+  blockinfile:
+    marker: "## {mark} Increase history limit"
+    path: "/home/pi/.bashrc"
+    insertafter: "EOF"
+    block: |
+      HISTSIZE=1000
+      HISTFILESIZE=10000
+
+- name: "bashrc: Set default editor to vim"
+  become: true
+  become_user: "pi"
+  blockinfile:
+    marker: "## {mark} Set default editor"
+    path: "/home/pi/.bashrc"
+    insertafter: "EOF"
+    block: |
+      export VISUAL=vim
+      export EDITOR="$VISUAL"
+
+- name: "bashrc: Change PS1 color"
+  become: true
+  become_user: "pi"
+  replace:
+    path: "/home/pi/.bashrc"
+    regexp: ';32m\\'
+    replace: ';34m\\'
+  tags: "bashrc"

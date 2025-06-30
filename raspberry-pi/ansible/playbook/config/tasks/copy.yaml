@@ -1,0 +1,14 @@
+- name: "copy: Download dot configs"
+  become: true
+  become_user: "pi"
+  get_url:
+    url: "{{ item.url }}"
+    dest: "{{ item.dest }}"
+    mode: '0644'
+  loop:
+    - url: https://raw.githubusercontent.com/matuzalemmuller/setup-workstation/refs/heads/main/playbook/config/files/inputrc
+      dest: "/home/pi/.inputrc"
+    - url: https://raw.githubusercontent.com/matuzalemmuller/setup-workstation/refs/heads/main/playbook/config/files/tmux.conf
+      dest: "/home/pi/.tmux.conf"
+    - url: https://raw.githubusercontent.com/matuzalemmuller/setup-workstation/refs/heads/main/playbook/config/files/vimrc
+      dest: "/home/pi/.vimrc"

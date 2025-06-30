@@ -1,0 +1,26 @@
+- name: "Check if log2ram is installed"
+  stat:
+    path: "/usr/local/bin/log2ram"
+  register: log2ram_binary
+
+- name: "Add gpg key for log2ram"
+  apt_key:
+    url: https://azlux.fr/repo.gpg
+    keyring: /usr/share/keyrings/azlux-archive-keyring.gpg
+  when: not log2ram_binary.stat.exists
+
+- name: "Add repo for log2ram"
+  apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/azlux-archive-keyring.gpg] http://packages.azlux.fr/debian/ bookworm maindeb [signed-by=/usr/share/keyrings/azlux-archive-keyring.gpg] http://packages.azlux.fr/debian/ bookworm main"
+    filename: azlux
+    state: present
+  when: not log2ram_binary.stat.exists
+
+- name: "Install log2ram package"
+  apt:
+    update_cache: true
+    name: log2ram
+    state: latest
+  when: not log2ram_binary.stat.exists
+  notify:
+    - Reboot

@@ -1,0 +1,2 @@
+- `ansible` contains the ansible playbooks for system configuration.
+- `image-setup` has the files to be copied when flashing a new SD card with [Raspberry Pi OS Lite](https://www.raspberrypi.com/software/operating-systems/#raspberry-pi-os-64-bit).

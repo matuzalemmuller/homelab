@@ -1,0 +1,30 @@
+volumes:
+  etc_wireguard:
+
+services:
+  wg-easy:
+    environment:
+    - LANG=en
+    - WG_HOST=backup.vpn.matuzalemmuller.com
+    - WG_DEFAULT_ADDRESS=10.69.100.x
+    - WG_ALLOWED_IPS=10.69.100.0/24,192.168.0.0/24
+    - WG_DEFAULT_DNS=8.8.8.8,8.8.4.4,1.1.1.1
+    - UI_TRAFFIC_STATS=true
+    - PORT=51821
+    - WG_PORT=51820
+    - WG_PERSISTENT_KEEPALIVE=30
+    - PASSWORD_HASH=$$2a$$12$$PElzV.bsc6YCwgKSjOZlV.rIEk/LStBzo8a2SN8VA9xd5q2vOmwuG
+    image: ghcr.io/wg-easy/wg-easy:14
+    container_name: wg-easy
+    volumes:
+    - etc_wireguard:/etc/wireguard
+    ports:
+    - "51820:51820/udp"
+    - "51821:51821/tcp"
+    restart: unless-stopped
+    cap_add:
+    - NET_ADMIN
+    - SYS_MODULE
+    sysctls:
+    - net.ipv4.ip_forward=1
+    - net.ipv4.conf.all.src_valid_mark=1

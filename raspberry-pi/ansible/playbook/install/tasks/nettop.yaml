@@ -1,0 +1,33 @@
+- name: "Check if nettop is installed"
+  stat: 
+    path: "/usr/local/bin/nettop"
+  register: nettop_binary
+
+- name: "Clone nettop"
+  git:
+    repo: "https://github.com/matuzalemmuller/nettop"
+    dest: "/tmp/nettop"
+    force: yes
+  when: not nettop_binary.stat.exists
+
+- name: "Compile nettop (make release)"
+  make:
+    chdir: "/tmp/nettop"
+    target: release
+  when: not nettop_binary.stat.exists
+
+- name: "Copy nettop executable to /usr/local/bin/nettop"
+  copy:
+    src: "/tmp/nettop/nettop"
+    dest: "/usr/local/bin/nettop"
+    remote_src: yes
+    owner: "root"
+    group: "root"
+    mode: '0555'
+  when: not nettop_binary.stat.exists
+
+- name: "Delete nettop folder"
+  file:
+    path: "/tmp/nettop"
+    state: absent
+  when: not nettop_binary.stat.exists

@@ -1,0 +1,4 @@
+- import_tasks: apt.yaml
+- import_tasks: docker.yaml
+- import_tasks: log2ram.yaml
+- import_tasks: nettop.yaml

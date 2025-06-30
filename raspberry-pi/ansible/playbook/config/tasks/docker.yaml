@@ -1,0 +1,29 @@
+- name: "Docker Compose: create directory"
+  file: 
+    path: "{{ item.path }}"
+    state: directory
+    owner: "pi"
+    group: "pi"
+  loop:
+    - path: "/home/pi/docker/meshcentral"
+    - path: "/home/pi/docker/wg-easy"
+
+- name: "Docker Compose: copy files"
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "pi"
+    group: "pi"
+    mode: '0644'
+  loop:
+    - src: "docker-compose/meshcentral.yaml"
+      dest: "/home/pi/docker/meshcentral/docker-compose.yaml"
+    - src: "docker-compose/wg-easy.yaml"
+      dest: "/home/pi/docker/wg-easy/docker-compose.yaml"
+
+- name: "Docker Compose: start containers"
+  community.docker.docker_compose_v2:
+    project_src: "{{ item.path }}"
+  loop:
+    - path: "/home/pi/docker/meshcentral"
+    - path: "/home/pi/docker/wg-easy"

@@ -1,0 +1,8 @@
+- name: "resolv: Add homelab domain search to /etc/resolv.conf"
+  become: true
+  blockinfile:
+    marker: "## {mark} Set search domains"
+    path: /etc/resolv.conf
+    insertafter: "EOF"
+    block: |
+      search homelab.matuzalemmuller.com

@@ -1,0 +1,49 @@
+- name: "DDNS: Ensure that current tracking files are absent"
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "/home/pi/ddns/ip.txt"
+    - "/home/pi/ddns/cloudflare.ids"
+
+- name: "DDNS: create directory"
+  file: 
+    path: "/home/pi/ddns"
+    state: directory
+    owner: "pi"
+    group: "pi"
+  tags: ddns
+
+- name: "DDNS: template script"
+  template:
+    src: templates/ddns.sh.j2
+    dest: /home/pi/ddns/ddns.sh
+    owner: "pi"
+    group: "pi"
+    mode: '0755'
+  tags: ddns
+
+- name: "DDNS: cron job to update every minute"
+  cron:
+    name: Update Cloudflare DDNS record every minute
+    minute: "*/1"
+    user: "pi"
+    job: /home/pi/ddns/ddns.sh
+  tags: ddns
+
+- name: "DDNS: copy logrotate config"
+  copy:
+    src: ddns_logrotate.cfg
+    dest: /home/pi/ddns/logrotate.cfg
+    owner: "pi"
+    group: "pi"
+  tags: ddns
+
+- name: "DDNS: cron job for logrotate"
+  cron:
+    name: Run logrotate for DDNS logs
+    minute: "0"
+    hour: "0"
+    user: "pi"
+    job: /usr/sbin/logrotate /home/pi/ddns/logrotate.cfg -s /home/pi/ddns/logrotate.status
+  tags: ddns

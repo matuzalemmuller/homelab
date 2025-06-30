@@ -1,0 +1,43 @@
+# Raspberry PI OS config.toml
+# This file is used for the initial setup of the system on the first boot, if
+# it's s present in the boot partition of the installation.
+#
+# This file is loaded by firstboot, parsed by init_config and ends up
+# as several calls to imager_custom.
+# The example below has all current fields.
+#
+# References:
+# - https://github.com/RPi-Distro/raspberrypi-sys-mods/blob/master/usr/lib/raspberrypi-sys-mods/firstboot
+# - https://github.com/RPi-Distro/raspberrypi-sys-mods/blob/master/usr/lib/raspberrypi-sys-mods/init_config
+# - https://github.com/RPi-Distro/raspberrypi-sys-mods/blob/master/usr/lib/raspberrypi-sys-mods/imager_custom
+
+# Required:
+config_version = 1
+
+[system]
+hostname = "rpi"
+
+[user]
+# If present, the default "rpi" user gets renamed to this "name"
+name = "pi"
+# The password can be encrypted or plain. To encrypt, we can use "openssl passwd -5 raspberry"
+password = ""
+password_encrypted = false
+
+[ssh]
+enabled = true
+password_authentication = true
+authorized_keys = [ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCdlktnWPGC/kT5UeGIIJd7IyqI++ethjNm88irSet/GIuCN5N1VWT8mIqb0ItzizWwo0cEkFvHfbBASGpesfxGBQ9GUpXBOgtnFB4RGImZ+ZMGUdOqSXvUWjCR0AnSupASz+MOXl8sWSmhDUTV7nYqDtmr4aNFUCKTFoWHXipeZeveSbQ60jLv3Oy9dh/YTjqsDc66MBEl2rtQhuPEqpb6x8CzcZI7kubwbYqtr0rQGKMiUIy3r0+xZgLLRez5T7V1DeXuEPeO2YgZW280vol/M4Lw529gvksoONGNwvSWH/EvzmWUwVzAqzSwKHOuT4A7yugf2uueU/eOCy/QyT84xBXtPw/rPFHpLe7T+KRix3JC2SghhCyrEQYstj7sGvfplBtwGjCAHLsgWkJPJSrc6QFh6JAipVaNJunIGLJ53T8Ykz3RxrS30blRQFhlWt1WY/zt5KlvuDz513SNHlansy7nhr8fNOJFHYz42Uv+/NBPnca2dw/kXSB3YmtKvXZgVUL/uOZOIQ15FSsD49P5k6rlSjY4cQEb7f5pD6rt4Txi9gvr/iGyhBXd1dfBDB58PwLg0tTZ1VPbRwXnGmbXOLlTa09nEGYHf4B+kH6GkKqLCpXXptS8VN0ROmajK7FPGZOGGfvngt5PshyPEM9kl83I9ep2k2+g0I4Q+RLsDw== root@pve" ]
+
+#[wlan]
+#ssid = "Agostinho"
+#password = ""
+#password_encrypted = false
+#hidden = false
+## The country is written to /etc/default/crda
+## Reference: https://wireless.wiki.kernel.org/en/developers/Regulatory
+#country = "IE"
+
+[locale]
+keymap = "en_US.UTF-8"
+timezone = "US/Eastern"
